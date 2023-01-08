@@ -5,6 +5,10 @@ const UserModel = require("../src/models/user.model");
 
 const app = express();
 app.use(express.json());
+
+app.set("view engine", "ejs");
+app.set("views", "src/views");
+
 app.use((req, res, next) => {
   console.log(`Request Type: ${req.method}`);
   console.log(`Content Type: ${req.headers["content-type"]}`);
@@ -31,6 +35,11 @@ app.get("/users/:id", async (req, res) => {
   } catch (error) {
     return res.status(500).send(error.message);
   }
+});
+
+app.get("/views/users", async (req, res) => {
+  const users = await UserModel.find({});
+  res.render("index", { users: users });
 });
 
 app.patch("/users/:id", async (req, res) => {
